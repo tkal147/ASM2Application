@@ -299,7 +299,7 @@ namespace ASM2.Controllers
         {
             using (var bwCtx = new ASM2.EF.FPTContext())
             {
-                ViewBag.Class = bwCtx.Trainer
+                ViewBag.Course = bwCtx.Course
                                       .Select(p => new SelectListItem
                                       {
                                           Text = p.Name,
@@ -307,7 +307,7 @@ namespace ASM2.Controllers
                                       })
                                       .ToList();
 
-                ViewBag.Course = bwCtx.Course.ToList();
+                ViewBag.Trainer = bwCtx.Trainer.ToList();
             }
         }
         public ActionResult ViewAllCourse()
@@ -326,7 +326,7 @@ namespace ASM2.Controllers
         {
             using (var bwCtx = new ASM2.EF.FPTContext())
             {
-                ViewBag.teachers = bwCtx.Trainee
+                ViewBag.Class = bwCtx.Course
                                       .Select(p => new SelectListItem
                                       {
                                           Text = p.Name,
@@ -334,7 +334,20 @@ namespace ASM2.Controllers
                                       })
                                       .ToList();
 
-                ViewBag.Class = bwCtx.Course.ToList();
+                ViewBag.Trainee = bwCtx.Trainee.ToList();
+            }
+        }
+        private List<SelectListItem> GetCategoryDropDown()
+        {
+            using (var bwCtx = new ASM2.EF.FPTContext())
+            {
+                var categories = bwCtx.Categories
+                                 .Select(p => new SelectListItem
+                                 {
+                                     Text = p.Name,
+                                     Value = p.Id.ToString()
+                                 }).ToList();
+                return categories;
             }
         }
         [HttpGet]
@@ -342,6 +355,7 @@ namespace ASM2.Controllers
         {
             PrepareViewBagT();
             PrepareViewBagS();
+            ViewBag.Categories = GetCategoryDropDown();
             return View();
         }
         [HttpPost]

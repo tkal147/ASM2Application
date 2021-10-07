@@ -3,7 +3,32 @@
     ViewBag.Title = "CreateCourse";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    //turn separated string into an int list.
+    List<int> selectTIds = new List<int>();
+    if (TempData["FormatIds"] != null)
+    {
+        selectTIds = TempData["FormatIds"].ToString().Split(',')
+                .Select(id => Int32.Parse(id))
+                .ToList();
+    }
 
+    //check all previously-checked box.
+
+}
+@{
+    //turn separated string into an int list.
+    List<int> selectSIds = new List<int>();
+    if (TempData["FormatIds"] != null)
+    {
+        selectSIds = TempData["FormatIds"].ToString().Split(',')
+                .Select(id => Int32.Parse(id))
+                .ToList();
+    }
+
+    //check all previously-checked box.
+
+}
 <h2>CreateCourse</h2>
 @using (Html.BeginForm(FormMethod.Post))
 {
@@ -24,7 +49,38 @@
                     @Html.EditorFor(m => m.Descrpitipon, new { htmlAttributes = new { @class = "form-control" } })
 
                 </div>
-
+                <div class="form-group">
+                    <label class="font-weight-bold mr-3">Trainer</label>
+                    @foreach (var f in ViewBag.Trainer)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="@f.Id" id="@f.Name" name="formatIds[]"
+                                   @(selectTIds.Contains(f.Id) ? "checked" : string.Empty)>
+                            <label class="form-check-label" for="@f.Name">
+                                @f.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+                <div class="form-group">
+                    <b>Categories</b>
+                        @Html.DropDownListFor(m => m.Category.Id,
+                                 (IEnumerable<SelectListItem>)ViewBag.Categories,
+                                 htmlAttributes: new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold mr-3">Trainee</label>
+                    @foreach (var f in ViewBag.Trainee)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="@f.Id" id="@f.Name" name="formatIds[]"
+                                   @(selectSIds.Contains(f.Id) ? "checked" : string.Empty)>
+                            <label class="form-check-label" for="@f.Name">
+                                @f.Name
+                            </label>
+                        </div>
+                    }
+                </div>
 
 
 
@@ -33,3 +89,5 @@
             </form>
         </div>
     </div>
+    
+}
