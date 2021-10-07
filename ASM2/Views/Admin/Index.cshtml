@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TrainingStaff>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row mt-2">
+    @Html.Partial("_Link")
+    <div class="col-8">
+        <form>
+            <h2>Staff</h2>
+            @foreach (var a in Model)
+            {
+                <div class="item p-3">
+                    <div class="form-group">
+
+
+                        @Html.EditorFor(model => a.Name, new { htmlAttributes = new { @class = "form-control line-1", disabled = "disabled" } })
+                        <a href="@Url.Action("EditStaff", new {id = a.Id })">
+                            <button type="button" class="btn btn-primary mb-2">View detail</button>
+                        </a>
+
+
+                        <a href="@Url.Action("DeleteStaff", new {id = a.Id })">
+                            <button type="button" class="btn btn-primary mb-2">Delete</button>
+                        </a>
+
+                    </div>
+                </div>
+            }
+
+        </form>
+    </div>
+</div>
+

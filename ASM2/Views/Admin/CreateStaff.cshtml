@@ -1,0 +1,37 @@
+﻿@model TrainingStaff
+@{
+    ViewBag.Title = "CreateStaff";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+    <div class="row mt-2">
+        @Html.Partial("_Link")
+        <div class="col-8">
+            <form>
+                <h2>CreateTrainer</h2>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "font-weight-bold" })
+                    @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                <div class="form-group">
+
+                    @Html.LabelFor(m => m.Contact, htmlAttributes: new { @class = "font-weight-bold" })
+                    @Html.EditorFor(m => m.Contact, new { htmlAttributes = new { @class = "form-control", type = "number" } })
+
+                </div>
+                
+
+
+
+                <button type="submit" class="btn btn-primary mb-2">ADD</button>
+
+            </form>
+        </div>
+    </div>
+
+}
+
+
