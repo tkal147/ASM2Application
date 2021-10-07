@@ -295,7 +295,7 @@ namespace ASM2.Controllers
                 return RedirectToAction("ViewAllTrainer");
             }
         }
-        private void PrepareViewBag()
+        private void PrepareViewBagT()
         {
             using (var bwCtx = new ASM2.EF.FPTContext())
             {
@@ -310,9 +310,38 @@ namespace ASM2.Controllers
                 ViewBag.Course = bwCtx.Course.ToList();
             }
         }
+        public ActionResult ViewAllCourse()
+        {
+
+            using (var bwCtx = new ASM2.EF.FPTContext())
+            {
+                var books = bwCtx.Course
+                                 .OrderBy(b => b.Id)
+                                 .ToList();
+                return View(books);
+            }
+
+        }
+        private void PrepareViewBagS()
+        {
+            using (var bwCtx = new ASM2.EF.FPTContext())
+            {
+                ViewBag.teachers = bwCtx.Trainee
+                                      .Select(p => new SelectListItem
+                                      {
+                                          Text = p.Name,
+                                          Value = p.Id.ToString()
+                                      })
+                                      .ToList();
+
+                ViewBag.Class = bwCtx.Course.ToList();
+            }
+        }
         [HttpGet]
         public ActionResult CreateCourse()
         {
+            PrepareViewBagT();
+            PrepareViewBagS();
             return View();
         }
         [HttpPost]

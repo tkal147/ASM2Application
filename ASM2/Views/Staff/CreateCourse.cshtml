@@ -1,17 +1,18 @@
-﻿@model ASM2.Models.FPT.Categories 
+﻿@model ASM2.Models.FPT.Course
 @{
-    ViewBag.Title = "CreateCategories";
+    ViewBag.Title = "CreateCourse";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>CreateCategories</h2>
+<h2>CreateCourse</h2>
 @using (Html.BeginForm(FormMethod.Post))
 {
     <div class="row mt-2">
         @Html.Partial("_LinkLeft")
         <div class="col-8">
             <form>
-                <h2>Create Category</h2>
+                <h2>Add Course</h2>
+
                 <div class="form-group">
                     @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "font-weight-bold" })
                     @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
@@ -23,14 +24,12 @@
                     @Html.EditorFor(m => m.Descrpitipon, new { htmlAttributes = new { @class = "form-control" } })
 
                 </div>
-                
-               
-                
-                
+
+
+
+
                 <button type="submit" class="btn btn-primary mb-2">ADD</button>
 
             </form>
         </div>
     </div>
-
-}
