@@ -10,31 +10,68 @@
     <div class="col-8">
         <form>
             <h2>View All trainee</h2>
+            <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by names.." class="form-control mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                @foreach (var a in Model)
+                {
+                    <tbody id="myTable">
+                        <tr>
+                            <td scope="row">@Html.DisplayFor(model => a.Id)</td>
+                            <td>@Html.DisplayFor(model => a.Name)</td>
+                            <td>
+                                <a href="@Url.Action("EditTrainee", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">View detail</button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("deleteTrainee", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">delete</button>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
 
-            @foreach (var a in Model)
-            {
-                <div class="item p-3">
-                    <div class="form-group">
+                    @*, new { htmlAttributes = new { @class = "form-control line-1", disabled = "disabled" } }
+                        <div class="item p-3">
+                            <div class="form-group">
 
 
-                        @Html.EditorFor(model => a.Name, new { htmlAttributes = new { @class = "form-control line-1", disabled = "disabled" } })
-                        <a href="@Url.Action("EditTrainee", new {id = a.Id })">
-                            <button type="button" class="btn btn-primary mb-2">View detail</button>
-                        </a>
+                                @Html.EditorFor(model => a.Name, new { htmlAttributes = new { @class = "form-control line-1", disabled = "disabled" } })
+                                <a href="@Url.Action("EditTrainee", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">View detail</button>
+                                </a>
 
-                        
-                        <a href="@Url.Action("deleteTrainee", new {id = a.Id })">
-                            <button type="button" class="btn btn-primary mb-2">delete</button>
-                        </a>
 
-                    </div>
-                </div>
-            }
+                                <a href="@Url.Action("deleteTrainee", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">delete</button>
+                                </a>
 
+                            </div>
+                        </div>*@
+                }
+            </table>
         </form>
+
     </div>
 </div>
-
 <script>
-    
+    $(document).ready(function () {
+        $('#myInput').on('keyup', function (event) {
+            event.preventDefault();
+            /* Act on the event */
+            var input = $(this).val().toLowerCase();
+            $('#myTable tr').filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+            });
+        });
+    });
 </script>
+
