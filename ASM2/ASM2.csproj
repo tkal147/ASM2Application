@@ -196,6 +196,10 @@
     <Compile Include="EF\FPTMigrations\202110061415113_AddName.Designer.cs">
       <DependentUpon>202110061415113_AddName.cs</DependentUpon>
     </Compile>
+    <Compile Include="EF\FPTMigrations\202110071453195_AddCatId.cs" />
+    <Compile Include="EF\FPTMigrations\202110071453195_AddCatId.Designer.cs">
+      <DependentUpon>202110071453195_AddCatId.cs</DependentUpon>
+    </Compile>
     <Compile Include="EF\FPTMigrations\Configuration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -285,6 +289,9 @@
     <Content Include="Views\Staff\EditTrainer.cshtml" />
     <Content Include="Views\Staff\ViewAllCourse.cshtml" />
     <Content Include="Views\Staff\CreateCourse.cshtml" />
+    <Content Include="Views\Staff\EditCourse.cshtml" />
+    <Content Include="Views\Staff\EditCategories.cshtml" />
+    <Content Include="Views\Staff\ViewAllCategories.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -310,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EF\FPTMigrations\202110061415113_AddName.resx">
       <DependentUpon>202110061415113_AddName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EF\FPTMigrations\202110071453195_AddCatId.resx">
+      <DependentUpon>202110071453195_AddCatId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

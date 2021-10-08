@@ -1,13 +1,10 @@
 ﻿<div class="col-3 mt-2">
-    <div class="form-group">
 
-
-    </div>
     <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
             autocomplete="off">
         Home
     </button>
-    
+
     <div class="Trainee">
         <a href="@Url.Action("index","Staff")">
             <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
@@ -22,7 +19,7 @@
             </button>
         </a>
     </div>
-   
+
     <div class="trainer">
         <a href="@Url.Action("ViewAllTrainer","Staff")">
             <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
@@ -30,41 +27,39 @@
                 View trainer
             </button>
         </a>
-        <a href="@Url.Action("ViewAllTrainer","Staff")">
+        <a href="@Url.Action("CreateTrainer","Staff")">
             <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
                     autocomplete="off">
                 Create new trainer
             </button>
         </a>
     </div>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Categories
-    </button>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Course
-    </button>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Topic
-    </button>
-    <div class="form-group">
-        <label for="exampleFormControlSelect1"></label>
-        <select class="form-control" id="exampleFormControlSelect1">
-            <option>Assign</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
+    <div class="Cat">
+        <a href="@Url.Action("ViewAllCategories","Staff")">
+            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
+                    autocomplete="off">
+                Categories
+            </button>
+        </a>
+        <a href="@Url.Action("CreateCategories","Staff")">
+            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
+                    autocomplete="off">
+                Create Categories
+            </button>
+        </a>
     </div>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Trainer Topic
-    </button>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Trainer course
-    </button>
+    <div class="Course">
+        <a href="@Url.Action("ViewAllCourse","Staff")">
+            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
+                    autocomplete="off">
+                Course
+            </button>
+        </a>
+        <a href="@Url.Action("CreateCourse","Staff")">
+            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
+                    autocomplete="off">
+                Create Course
+            </button>
+        </a>
+    </div>
 </div>

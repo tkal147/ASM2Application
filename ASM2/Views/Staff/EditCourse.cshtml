@@ -1,6 +1,6 @@
 ﻿@model ASM2.Models.FPT.Course
 @{
-    ViewBag.Title = "CreateCourse";
+    ViewBag.Title = "EditCourse";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
@@ -12,7 +12,12 @@
                 .Select(id => Int32.Parse(id))
                 .ToList();
     }
-
+    else if (Model != null) // this is in Edit
+    {
+        selectTIds = Model.Trainer
+                   .Select(f => f.Id)
+                   .ToList();
+    }
     //check all previously-checked box.
 
 }
@@ -25,11 +30,16 @@
                 .Select(id => Int32.Parse(id))
                 .ToList();
     }
-
+    else if (Model != null) // this is in Edit
+    {
+        selectSIds = Model.Trainee
+                   .Select(f => f.Id)
+                   .ToList();
+    }
     //check all previously-checked box.
 
 }
-<h2>CreateCourse</h2>
+<h2>EditCourse</h2>
 @if (!ViewData.ModelState.IsValid)
 {
     @Html.ValidationSummary(false, "Error Summary", new { @class = "text-danger" })
