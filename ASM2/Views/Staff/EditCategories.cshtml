@@ -3,7 +3,11 @@
     ViewBag.Title = "EditCategories";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@if (!ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary(false, "Error Summary", new { @class = "text-danger" })
 
+}
 <h2>EditCategories</h2>
 @using (Html.BeginForm(FormMethod.Post))
 {

@@ -3,6 +3,11 @@
     ViewBag.Title = "EditCourse";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@if (!ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary(false, "Error Summary", new { @class = "text-danger" })
+
+}
 @{
     //turn separated string into an int list.
     List<int> selectTIds = new List<int>();
@@ -40,11 +45,7 @@
 
 }
 <h2>EditCourse</h2>
-@if (!ViewData.ModelState.IsValid)
-{
-    @Html.ValidationSummary(false, "Error Summary", new { @class = "text-danger" })
 
-}
 @using (Html.BeginForm(FormMethod.Post))
 {
     <div class="row mt-2">

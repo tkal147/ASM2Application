@@ -200,6 +200,10 @@
     <Compile Include="EF\FPTMigrations\202110071453195_AddCatId.Designer.cs">
       <DependentUpon>202110071453195_AddCatId.cs</DependentUpon>
     </Compile>
+    <Compile Include="EF\FPTMigrations\202110080946003_test.cs" />
+    <Compile Include="EF\FPTMigrations\202110080946003_test.Designer.cs">
+      <DependentUpon>202110080946003_test.cs</DependentUpon>
+    </Compile>
     <Compile Include="EF\FPTMigrations\Configuration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -320,6 +324,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="EF\FPTMigrations\202110071453195_AddCatId.resx">
       <DependentUpon>202110071453195_AddCatId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EF\FPTMigrations\202110080946003_test.resx">
+      <DependentUpon>202110080946003_test.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
