@@ -13,5 +13,13 @@ namespace ASM2.Controllers
         {
             return View();
         }
+        public ActionResult ViewInformation()
+        {
+            return View();
+        }
+        public ActionResult ViewInformationOfCourse()
+        {
+            return View();
+        }
     }
 }
