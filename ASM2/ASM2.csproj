@@ -296,11 +296,14 @@
     <Content Include="Views\Staff\EditCourse.cshtml" />
     <Content Include="Views\Staff\EditCategories.cshtml" />
     <Content Include="Views\Staff\ViewAllCategories.cshtml" />
+    <Content Include="Views\Trainer\Index.cshtml" />
+    <Content Include="Views\Trainee\Index.cshtml" />
+    <Content Include="Views\Trainer\ViewInformation.cshtml" />
+    <Content Include="Views\Trainer\ViewInformationOfCourse.cshtml" />
+    <Content Include="Views\Trainee\ViewInformationOfCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Trainee\" />
-    <Folder Include="Views\Trainer\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
