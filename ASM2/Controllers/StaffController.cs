@@ -310,13 +310,13 @@ namespace ASM2.Controllers
         {
             using (var bwCtx = new ASM2.EF.FPTContext())
             {
-                ViewBag.Course = bwCtx.Course
-                                      .Select(p => new SelectListItem
-                                      {
-                                          Text = p.Name,
-                                          Value = p.Id.ToString()
-                                      })
-                                      .ToList();
+                //ViewBag.Course = bwCtx.Course
+                //                      .Select(p => new SelectListItem
+                //                      {
+                //                          Text = p.Name,
+                //                          Value = p.Id.ToString()
+                //                      })
+                //                      .ToList();
 
                 ViewBag.Trainer = bwCtx.Trainer.ToList();
             }
@@ -337,13 +337,13 @@ namespace ASM2.Controllers
         {
             using (var bwCtx = new ASM2.EF.FPTContext())
             {
-                ViewBag.Class = bwCtx.Course
-                                      .Select(p => new SelectListItem
-                                      {
-                                          Text = p.Name,
-                                          Value = p.Id.ToString()
-                                      })
-                                      .ToList();
+                //ViewBag.Class = bwCtx.Course
+                //                      .Select(p => new SelectListItem
+                //                      {
+                //                          Text = p.Name,
+                //                          Value = p.Id.ToString()
+                //                      })
+                //                      .ToList();
 
                 ViewBag.Trainee = bwCtx.Trainee.ToList();
             }
