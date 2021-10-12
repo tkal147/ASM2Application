@@ -6,7 +6,12 @@
     -ms-flex-pack: center;
     justify-content: center;
 }
-
+.contain {
+    background-image: url();
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 90vh;
+}
     body header img {
         width: 252px;
     }

@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<ASM2.Models.FPT.Categories>
 @{
-    ViewBag.Title = "ViewAllCourse";
+    ViewBag.Title = "ViewAllCategories";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,7 +8,7 @@
     @Html.Partial("_LinkLeft")
     <div class="col-8">
         <form>
-            <h2>View Course</h2>
+            <h2>View Categories</h2>
 
             @foreach (var a in Model)
             {
