@@ -21,7 +21,7 @@ namespace ASM2.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("BwConnection", throwIfV1Schema: false)
         {
         }
 

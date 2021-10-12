@@ -363,18 +363,18 @@ namespace ASM2.Controllers
         }
         private List<Trainer> LoadFormatsT(ASM2.EF.FPTContext bwCtx, string formatIds)
         {
-            var selectedFIds = formatIds.Split(',')
+            var selectedTIds = formatIds.Split(',')
                                         .Select(id => Int32.Parse(id))
                                         .ToArray();
-            return bwCtx.Trainer.Where(f => selectedFIds.Contains(f.Id)).ToList();
+            return bwCtx.Trainer.Where(f => selectedTIds.Contains(f.Id)).ToList();
 
         }
         private List<Trainee> LoadFormatsS(ASM2.EF.FPTContext bwCtx, string formatIds)
         {
-            var selectedFIds = formatIds.Split(',')
+            var selectedSIds = formatIds.Split(',')
                                         .Select(id => Int32.Parse(id))
                                         .ToArray();
-            return bwCtx.Trainee.Where(f => selectedFIds.Contains(f.Id)).ToList();
+            return bwCtx.Trainee.Where(f => selectedSIds.Contains(f.Id)).ToList();
 
         }
         [HttpGet]
