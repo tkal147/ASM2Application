@@ -86,9 +86,11 @@
                 </div>
                 <div class="form-group">
                     <label class="font-weight-bold mr-3">Trainee</label>
+                    <p>Search Student by id to assign</p>
+                    <input type="text" id="chkfilterl" class="form-control">
                     @foreach (var f in ViewBag.Trainee)
                     {
-                        <div class="form-check form-check-inline">
+                        <div class="form-check form-check-inline input-box">
                             <input class="form-check-input" type="checkbox" value="@f.Id" id="@f.Name" name="traineeIds[]"
                                    @(selectSIds.Contains(f.Id) ? "checked" : string.Empty)>
                             <label class="form-check-label" for="@f.Name">
@@ -107,3 +109,21 @@
     </div>
 
 }
+<script>
+    $('#chkfilterl').on('keyup', function() {
+        var query = $(this).val().toLowerCase();
+        $('.input-box').each(function(i, elem) {
+            if (elem.value.toLowerCase().indexOf(query) != -1) {
+                $(this).parent().css({
+                    display: "inline"
+                });
+
+            } else {
+                $(this).parent().css({
+                    display: "none"
+                });
+
+            }
+        });
+    });
+</script>
