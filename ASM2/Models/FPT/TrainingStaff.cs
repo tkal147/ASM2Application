@@ -8,9 +8,9 @@ using System.Web;
 public class TrainingStaff
 {
     public int Id { get; set; }
-    [Required(ErrorMessage = "Please choose Name")]
+    [Required(ErrorMessage = "Please Enter your Name")]
     public string Name { get; set; }
-    [Required(ErrorMessage = "Please choose Contact")]
+    [Required(ErrorMessage = "Please Enter your Contact")]
     public string Contact { get; set; }
     
 }
