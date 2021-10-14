@@ -8,19 +8,19 @@ using ASM2.Models.FPT;
 public class Trainee
 {
     public int Id { get; set; }
-    [Required(ErrorMessage = "Please choose Name")]
+    [Required(ErrorMessage = "Please Enter your Name")]
     public string Name { get; set; }
-    [Required(ErrorMessage = "Please choose Education")]
+    [Required(ErrorMessage = "Please Enter your Education")]
     public string Education { get; set; }
-    [Required(ErrorMessage = "Please choose DOB")]
+    [Required(ErrorMessage = "Please Enter your DOB")]
     public string DOB { get; set; }
-    [Required(ErrorMessage = "Please choose Age")]
+    [Required(ErrorMessage = "Please choose your Age")]
     public string Age { get; set; }
-    [Required(ErrorMessage = "Please choose Department")]
+    [Required(ErrorMessage = "Please Enter your Department")]
     public string Department { get; set; }
-    [Required(ErrorMessage = "Please choose Toeic")]
+    [Required(ErrorMessage = "Please Enter your Toeic")]
     public string TOEIC { get; set; }
-    [Required(ErrorMessage = "Please choose Location")]
+    [Required(ErrorMessage = "Please Enter your Location")]
     public string Location { get; set; }
    
     public Course Course { get; set; }

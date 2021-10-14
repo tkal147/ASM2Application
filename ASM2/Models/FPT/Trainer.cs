@@ -8,13 +8,13 @@ using ASM2.Models.FPT;
 public class Trainer
 {
     public int Id { get; set; }
-    [Required(ErrorMessage = "Please choose Name")]
+    [Required(ErrorMessage = "Please Enter your Name")]
     public string Name { get; set; }
-    [Required(ErrorMessage = "Please choose telephone")]
+    [Required(ErrorMessage = "Please Enter your telephone")]
     public string Telephone { get; set; }
-    [Required(ErrorMessage = "Please choose Email")]
+    [Required(ErrorMessage = "Please Enter your Email")]
     public string Email { get; set; }
-    [Required(ErrorMessage = "Please choose type")]
+    [Required(ErrorMessage = "Please Enter your type")]
     public string Type { get; set; }
     [Required(ErrorMessage = "Please choose Working Place")]
     public string WorkingPlace { get; set; }
