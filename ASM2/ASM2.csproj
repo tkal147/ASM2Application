@@ -221,6 +221,7 @@
     <Compile Include="Models\FPT\Categories.cs" />
     <Compile Include="Models\FPT\Course.cs" />
     <Compile Include="Models\FPT\Person.cs" />
+    <Compile Include="Models\FPT\Trainee.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
