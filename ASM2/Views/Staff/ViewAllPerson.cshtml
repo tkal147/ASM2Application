@@ -1,0 +1,110 @@
+﻿@model IEnumerable<ASM2.Models.FPT.Person>
+
+@{
+    ViewBag.Title = "Person";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    tbody tr {
+        display: none;
+    }
+</style>
+<div class="row mt-2">
+    @Html.Partial("_LinkLeft")
+    <div class="col-8">
+        <form>
+            <h2>View All Trainer Trainee</h2>
+            <div class="dropdown mb-3">
+                <p class="btn btn-secondary" style="margin:0;">
+                    Choose role
+                </p>
+                <button type="button" class="btn btn-outline-primary Trainer1">Trainer</button>
+                <button type="button" class="btn btn-outline-primary Trainee1">Trainee</button>
+
+            </div>
+            <input type="text" id="myInputT" onkeyup="myFunction()" placeholder="Search by names.." class="form-control mb-3" style="display:none">
+            <input type="text" id="myInputS" onkeyup="myFunction()" placeholder="Search by names.." class="form-control mb-3" style="display:none">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Role</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                @foreach (var a in Model)
+                {
+                    <tbody id="myTable">
+                        <tr class="@a.Role">
+                            <td scope="row">@Html.DisplayFor(model => a.Role)</td>
+                            <td>@Html.DisplayFor(model => a.Name)</td>
+                            <td>
+                                <a href="@Url.Action("EditPerson", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">View detail</button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("deletePerson", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">delete</button>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                }
+            </table>
+        </form>
+
+    </div>
+</div>
+<script>
+
+
+
+
+    var a = true;
+    $('.Trainee1').click(function () {
+        $('#myInputS').css('display', 'block');
+        $('.Trainer').css('display', 'none');
+        $('.Trainee').css('display', 'table-row');
+        $('#myInputT').css('display', 'none');
+    });
+    $('.Trainer1').click(function () {
+        $('#myInputT').css('display', 'block');
+        $('#myInputS').css('display', 'none');
+        $('.Trainee').css('display', 'none');
+        $('.Trainer').css('display', 'table-row');
+    });
+
+    $('#myInputS').on('keyup', function (event) {
+        event.preventDefault();
+        /* Act on the event */
+
+        var input = $(this).val().toLowerCase();
+        $('#myTable tr').filter(function () {
+
+            $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+            $('.Admin').css('display', 'none');
+            $('.Staff').css('display', 'none');
+            $('.Trainer').css('display', 'none');
+        });
+    });
+
+    $('#myInputT').on('keyup', function (event) {
+        event.preventDefault();
+        /* Act on the event */
+
+        var input = $(this).val().toLowerCase();
+        $('#myTable tr').filter(function () {
+
+            $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+            $('.Admin').css('display', 'none');
+            $('.Staff').css('display', 'none');
+            $('.Student').css('display', 'none');
+        });
+    });
+
+</script>
+
