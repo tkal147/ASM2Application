@@ -1,0 +1,90 @@
+﻿@model ASM2.Models.ApplicationUser
+@{
+    ViewBag.Title = "CreateTrainee";
+    Layout = "~/Views/Admin/_LayoutPageAdmin.cshtml";
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary(false, "Error Summary", new { @class = "text-danger" })
+
+}
+<style>
+    .Student {
+        display: none
+    }
+
+    .Teacher {
+        display: none
+    }
+
+    #Staff {
+        display: none
+    }
+</style>
+@using (Html.BeginForm(FormMethod.Post))
+{
+    <div class="row mt-2">
+
+        <div class="col-8">
+            <form>
+
+                <h2>Add new Account</h2>
+                <p>Choose one*</p>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    
+                    <label class="btn btn-secondary Trainer">
+                        <input type="radio" name="options" id="option2" class=""checked> Trainer
+                    </label>
+                    <label class="btn btn-secondary Staff">
+                        <input type="radio" name="options" id="option3" class="" > Staff
+                    </label>
+                </div>
+                
+
+
+
+                <div class="form-group ">
+                    @Html.LabelFor(m => m.Name, htmlAttributes: new { @class = "font-weight-bold" })*
+                    @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
+
+                </div>
+                @Html.HiddenFor(m => m.Role, htmlAttributes: new { @class = "Role" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, htmlAttributes: new { @class = "font-weight-bold" })
+                    @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="form-group" id="Staff">
+                    @Html.LabelFor(m => m.Contact, htmlAttributes: new { @class = "font-weight-bold" })
+                    @Html.EditorFor(m => m.Contact, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+
+                
+                <button type="submit" class="btn btn-primary mb-2">ADD</button>
+
+            </form>
+        </div>
+    </div>
+
+}
+<script>
+    $('#Role').val('Trainer');
+    $('.Role').val('Trainer');
+    $('.Trainer').click(function () {
+
+        $('.Teacher').css('display', 'block');
+        $('.Student').css('display', 'none');
+        $('#Staff').css('display', 'none');
+        $('#Role').val('Trainer');
+        $('.Role').val('Trainer');
+    });
+    $('.Staff').click(function () {
+        $('#Role').removeAttr('value');
+        $('.Role').removeAttr('value');
+        $('.Teacher').css('display', 'none');
+        $('.Student').css('display', 'none');
+        $('#Staff').css('display', 'block');
+        $('#Role').val('Staff');
+        $('.Role').val('Staff');
+    });
+</script>

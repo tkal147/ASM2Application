@@ -1,0 +1,95 @@
+﻿@model ASM2.Models.ApplicationUser
+@{
+    ViewBag.Title = "ASSIGN TRAINER";
+    Layout = "~/Views/Staff/_LayoutPageStaff.cshtml";
+}
+@if (!ViewData.ModelState.IsValid)
+{
+    @Html.ValidationSummary(false, "Error Summary", new { @class = "text-danger" })
+
+}
+
+@{
+    //turn separated string into an int list.
+    List<int> selectSIds = new List<int>();
+    if (TempData["trainerIds"] != null)
+    {
+        selectSIds = TempData["trainerIds"].ToString().Split(',')
+                .Select(id => Int32.Parse(id))
+                .ToList();
+    }
+    else if (Model != null) // this is in Edit
+    {
+        selectSIds = Model.Course
+                   .Select(f => f.Id)
+                   .ToList();
+    }
+    //check all previously-checked box.
+
+}
+
+<style>
+    .none {
+        display: none
+    }
+</style>
+@using (Html.BeginForm(FormMethod.Post))
+{
+    <div class="row mt-2">
+        
+        <div class="col-8">
+            <form>
+                <h2>Assign Trainer</h2>
+                @Html.HiddenFor(m => m.Id)
+                @Html.HiddenFor(m => m.Name)
+                @Html.HiddenFor(m => m.Role)
+                @Html.HiddenFor(m => m.UserName)
+                @Html.HiddenFor(m => m.Email)
+                @Html.HiddenFor(m => m.Telephone)
+                @Html.HiddenFor(m => m.Type)
+                @Html.HiddenFor(m => m.WorkingPlace)
+                @Html.HiddenFor(m => m.PasswordHash)
+                @Html.HiddenFor(m => m.SecurityStamp)
+                <div class="form-group">
+                    <b>Name of Trainer:</b> <br>
+                    @Html.DisplayFor(m => m.Name)
+
+                </div>
+
+
+                <div class="form-group">
+                    <b> ASSIGN TRAINER TO COURSE:</b>
+
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold mr-3">Course</label>
+
+
+                    @foreach (var f in ViewBag.Person)
+                    {
+                        <div class="form-check form-check-inline input-box">
+                            <input class="form-check-input" type="checkbox" value="@f.Id" id="@f.Name" name="trainerIds[]"
+                                   @(selectSIds.Contains(f.Id) ? "checked" : string.Empty)>
+                            <label class="form-check-label" for="@f.Name">
+                                @f.Name
+                            </label>
+                        </div>
+                    }
+                </div>
+
+
+
+                <button type="submit" class="btn btn-primary mb-2">Assign</button>
+
+            </form>
+        </div>
+    </div>
+
+}
+<script>
+    $(document).ready(function () {
+        $('.Trainer').css('display', 'inline');
+
+        
+    });
+</script>

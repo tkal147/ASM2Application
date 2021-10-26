@@ -1,55 +1,21 @@
 ﻿@model ASM2.Models.FPT.Course
 @{
     ViewBag.Title = "EditCourse";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Staff/_LayoutPageStaff.cshtml";
 }
 @if (!ViewData.ModelState.IsValid)
 {
     @Html.ValidationSummary(false, "Error Summary", new { @class = "text-danger" })
 
 }
-@{
-    //turn separated string into an int list.
-    List<int> selectTIds = new List<int>();
-    if (TempData["trainerIds"] != null)
-    {
-        selectTIds = TempData["trainerIds"].ToString().Split(',')
-                .Select(id => Int32.Parse(id))
-                .ToList();
-    }
-    else if (Model != null) // this is in Edit
-    {
-        selectTIds = Model.Trainer
-                   .Select(f => f.Id)
-                   .ToList();
-    }
-    //check all previously-checked box.
 
-}
-@{
-    //turn separated string into an int list.
-    List<int> selectSIds = new List<int>();
-    if (TempData["traineeIds"] != null)
-    {
-        selectSIds = TempData["traineeIds"].ToString().Split(',')
-                .Select(id => Int32.Parse(id))
-                .ToList();
-    }
-    else if (Model != null) // this is in Edit
-    {
-        selectSIds = Model.Trainee
-                   .Select(f => f.Id)
-                   .ToList();
-    }
-    //check all previously-checked box.
 
-}
 <h2>EditCourse</h2>
 
 @using (Html.BeginForm(FormMethod.Post))
 {
     <div class="row mt-2">
-        @Html.Partial("_LinkLeft")
+      
         <div class="col-8">
             <form>
                 <h2>Edit Course</h2>
@@ -65,40 +31,14 @@
                     @Html.EditorFor(m => m.Descrpitipon, new { htmlAttributes = new { @class = "form-control" } })
 
                 </div>
-                <div class="form-group">
-                    <label class="font-weight-bold mr-3">Trainer</label>
-                    @foreach (var f in ViewBag.Trainer)
-                    {
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="@f.Id" id="@f.Name" name="trainerIds[]"
-                                   @(selectTIds.Contains(f.Id) ? "checked" : string.Empty)>
-                            <label class="form-check-label" for="@f.Name">
-                                @f.Name
-                            </label>
-                        </div>
-                    }
-                </div>
+                
                 <div class="form-group">
                     <b>Categories</b>
                     @Html.DropDownListFor(m => m.CatId,
                              (IEnumerable<SelectListItem>)ViewBag.Categories,
                              htmlAttributes: new { @class = "form-control" })
                 </div>
-                <div class="form-group">
-                    <label class="font-weight-bold mr-3">Trainee</label>
-                    <p>Search Student by id to assign</p>
-                    <input type="text" id="chkfilterl" class="form-control">
-                    @foreach (var f in ViewBag.Trainee)
-                    {
-                        <div class="form-check form-check-inline input-box">
-                            <input class="form-check-input" type="checkbox" value="@f.Id" id="@f.Name" name="traineeIds[]"
-                                   @(selectSIds.Contains(f.Id) ? "checked" : string.Empty)>
-                            <label class="form-check-label" for="@f.Name">
-                                @f.Name
-                            </label>
-                        </div>
-                    }
-                </div>
+                
 
 
 
@@ -110,20 +50,5 @@
 
 }
 <script>
-    $('#chkfilterl').on('keyup', function() {
-        var query = $(this).val().toLowerCase();
-        $('.input-box').each(function(i, elem) {
-            if (elem.value.toLowerCase().indexOf(query) != -1) {
-                $(this).parent().css({
-                    display: "inline"
-                });
-
-            } else {
-                $(this).parent().css({
-                    display: "none"
-                });
-
-            }
-        });
-    });
+    
 </script>

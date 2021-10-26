@@ -21,4 +21,42 @@ body .row {
     -ms-flex-pack: justify;
     justify-content: space-between;
 }
+.xt-ct-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.xtlab-ctmenu-item {
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+    .xtlab-ctmenu-item:hover,
+    .xtlab-ctmenu-item:focus {
+        background-color: #9c3328;
+    }
+
+.xtlab-ctmenu-sub {
+    display: none;
+    position: absolute;
+    background-color: #3e8e41;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+    .xtlab-ctmenu-sub a {
+        color: white;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+        .xtlab-ctmenu-sub a:hover {
+            background-color: orange;
+            border: none;
+        }
 /*# sourceMappingURL=Traniee.css.map */

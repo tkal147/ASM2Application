@@ -1,0 +1,31 @@
+﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+
+        <h4>Trainee</h4>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown" style="display:flex;justify-content:space-between">
+            <ul class="navbar-nav">
+                
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Trainee
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="@Url.Action("ViewInformation","Trainee")">View course assign</a>
+                        <a class="dropdown-item" href="@Url.Action("Index","Trainee")">View profile</a>
+                        <a class="dropdown-item" href="@Url.Action("ChangePassword","Manage")">Change Pass</a>
+
+                    </div>
+                </li>
+
+
+
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+
+    </div>
+</nav>

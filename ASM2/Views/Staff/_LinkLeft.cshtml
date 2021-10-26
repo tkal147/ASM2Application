@@ -1,65 +1,57 @@
-﻿<div class="col-3 mt-2">
+﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container" style="align-items:center;">
 
-    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Home
-    </button>
+        <h4>Staff</h4>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown" style="display:flex;justify-content:space-between">
+            <ul class="navbar-nav">
+               
 
-    <div class="Trainee">
-        <a href="@Url.Action("index","Staff")">
-            <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
-                    autocomplete="off">
-                Trainee Account
-            </button>
-        </a>
-        <a href="@Url.Action("CreateTrainee","Staff")">
-            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-                    autocomplete="off">
-                Add new Trainee Account
-            </button>
-        </a>
-    </div>
 
-    <div class="trainer">
-        <a href="@Url.Action("ViewAllTrainer","Staff")">
-            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-                    autocomplete="off">
-                View trainer
-            </button>
-        </a>
-        <a href="@Url.Action("CreateTrainer","Staff")">
-            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-                    autocomplete="off">
-                Create new trainer
-            </button>
-        </a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Trainee & Trainer
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="@Url.Action("CreatePerson","Staff")">Add Trainee</a>
+                        <a class="dropdown-item" href="@Url.Action("ViewAllPerson","Staff")">View Trainer & Trainee</a>
+                        
+
+                    </div>
+
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Categories of course
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        
+                        <a class="dropdown-item" href="@Url.Action("CreateCategories","Staff")">Add Categories</a>
+                        <a class="dropdown-item" href="@Url.Action("ViewAllCategories","Staff")">View Categories</a>
+                        
+
+                    </div>
+
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Course
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        
+                        <a class="dropdown-item" href="@Url.Action("CreateCourse","Staff")">Create Course</a>
+                        <a class="dropdown-item" href="@Url.Action("ViewAllCourse","Staff")">View Course</a>
+
+                    </div>
+
+                </li>
+
+
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+
     </div>
-    <div class="Cat">
-        <a href="@Url.Action("ViewAllCategories","Staff")">
-            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-                    autocomplete="off">
-                Categories
-            </button>
-        </a>
-        <a href="@Url.Action("CreateCategories","Staff")">
-            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-                    autocomplete="off">
-                Create Categories
-            </button>
-        </a>
-    </div>
-    <div class="Course">
-        <a href="@Url.Action("ViewAllCourse","Staff")">
-            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-                    autocomplete="off">
-                Course
-            </button>
-        </a>
-        <a href="@Url.Action("CreateCourse","Staff")">
-            <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-                    autocomplete="off">
-                Create Course
-            </button>
-        </a>
-    </div>
-</div>
+</nav>

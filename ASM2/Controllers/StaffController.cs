@@ -5,20 +5,113 @@ using System.Web;
 using System.Web.Mvc;
 using ASM2.Models.FPT;
 using System.Data.Entity;
+using ASM2.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
 
 namespace ASM2.Controllers
 {
+    [HandleError]
+    [Authorize(Roles = "Staff")]
     public class StaffController : Controller
     {
         public ActionResult ViewAllPerson()
         {
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
-                var books = bwCtx.Person
+                var books = bwCtx.Users
                                  .OrderBy(b => b.Id)
                                  .ToList();
                 return View(books);
             }
+        }
+        private void CustomValid(ApplicationUser trainee)
+        {
+            if (trainee.Role == "Trainer")
+            {
+                if (trainee.Telephone != null)
+                {
+
+                    if ((Int32.Parse(trainee.Telephone) / 1000000000) != 0)
+                    {
+                        ModelState.AddModelError("Contact", "Contact must start with 0");
+                    }
+                    if (Int32.Parse(trainee.Telephone) < 100000000)
+                    {
+                        ModelState.AddModelError("Contact", "Contact must be longer than 10 number");
+                    }
+
+                }
+            }
+            if (trainee.Role == "Trainee")
+            {
+                if (trainee.Contact != null)
+                {
+                    ModelState.AddModelError("Contact", "Contact can not be null");
+                }
+                if (trainee.DOB == null)
+                {
+                    ModelState.AddModelError("DOB", "DOB can not be null");
+                }
+                if (trainee.TOEIC == null)
+                {
+                    ModelState.AddModelError("TOEIC", "TOEIC can not be null");
+                }
+                if (trainee.Age == null)
+                {
+                    ModelState.AddModelError("Age", "Age can not be null");
+                }
+                if (trainee.Education == null)
+                {
+                    ModelState.AddModelError("Education", "Education can not be null");
+                }
+                if (trainee.Department == null)
+                {
+                    ModelState.AddModelError("Department", "Department can not be null");
+                }
+                if (trainee.Location == null)
+                {
+                    ModelState.AddModelError("Location", "Location can not be null");
+                }
+                if (trainee.Contact != null)
+                {
+
+                    if ((Int32.Parse(trainee.Contact) / 1000000000) != 0)
+                    {
+                        ModelState.AddModelError("Contact", "Contact must start with 0");
+                    }
+                    if (Int32.Parse(trainee.Contact) < 100000000)
+                    {
+                        ModelState.AddModelError("Contact", "Contact must be longer than 10 number");
+                    }
+
+                }
+
+                if (trainee.TOEIC != null)
+                {
+                    if (Int32.Parse(trainee.TOEIC) < 0 || Int32.Parse(trainee.TOEIC) > 950)
+                    {
+                        ModelState.AddModelError("TOEIC", "Toeic must be greater than 0 and less than 950");
+                    }
+                }
+                if (trainee.DOB != null && trainee.Age != null)
+                {
+                    int year = Int32.Parse(trainee.DOB.Split('-')[0]);
+                    int now = DateTime.Now.Year;
+                    int age = now - year;
+                    if (age < Int32.Parse(trainee.Age) || age > Int32.Parse(trainee.Age))
+                    {
+                        ModelState.AddModelError("DOB", "Age must match the Date of birth");
+                    }
+                    if (year > 2003)
+                    {
+                        ModelState.AddModelError("DOB", "The date of birth must be from 2003 back");
+                    }
+                }
+
+            }
+
         }
         [HttpGet]
         public ActionResult CreatePerson()
@@ -26,31 +119,69 @@ namespace ASM2.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult CreatePerson(Person newPerson)
+        public async Task<ActionResult> CreatePerson(ApplicationUser newUser)
         {
+            CustomValid(newUser);
+            ApplicationDbContext context = new ApplicationDbContext();
+            var roleManager = new Microsoft.AspNet.Identity.RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var userManager = new Microsoft.AspNet.Identity.UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             if (!ModelState.IsValid)
             {
-                return View(newPerson);
+                return View(newUser);
             }
             else
             {
-                using (var bwCtx = new ASM2.EF.FPTContext())
+                var user = new ApplicationUser
                 {
-                    bwCtx.Person.Add(newPerson);
-                    bwCtx.SaveChanges();
+                    UserName = newUser.Email,
+                    Email = newUser.Email,
+                    Age = newUser.Age,
+                    Name = newUser.Name,
+                    WorkingPlace = newUser.WorkingPlace,
+                    Type = newUser.Type,
+                    Location = newUser.Location,
+                    Telephone = newUser.Telephone,
+                    TOEIC = newUser.TOEIC,
+                    Department = newUser.Department,
+                    Education = newUser.Education,
+                    DOB = newUser.DOB,
+                    Role = newUser.Role
+                };
+                if (user.Email == null)
+                {
+                    ModelState.AddModelError("Gmail", "Email cannot be null ");
+                    return View(newUser);
                 }
+                else
+                {
+                    var bwCtx = new ApplicationDbContext();
+                    var gmail = bwCtx.Users.FirstOrDefault(b => b.Email == user.Email);
+                    if (gmail == null)
+                    {
+                        var result = await userManager.CreateAsync(user, "Xyz@12345");
+                        if (result.Succeeded)
+                        {
+                            userManager.AddToRole(user.Id, newUser.Role);
 
-                TempData["message"] = $"Successfully insert a new book with Id: {newPerson.Id}";
-                return RedirectToAction("viewallperson");
+                        }
+                        TempData["message"] = $"Successfully insert a new book with Id: {newUser.Id}";
+                        return RedirectToAction("viewallperson");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("Gmail", "This Gmail already exists");
+                        return View(newUser);
+                    }
+                }
             }
-
+            return RedirectToAction("Index");
         }
         [HttpGet]
-        public ActionResult EditPerson(int id)
+        public ActionResult EditPerson(string id)
         {
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
-                var book = bwCtx.Person.FirstOrDefault(b => b.Id == id);
+                var book = bwCtx.Users.FirstOrDefault(b => b.Id == id);
                 //ef method to select only one or null if not found
 
                 if (book != null) // if a book is found, show edit view
@@ -59,18 +190,18 @@ namespace ASM2.Controllers
                 }
                 else // if no book is found, back to index
                 {
-                    return RedirectToAction("Index"); //redirect to action in the same controller
+                    return RedirectToAction("viewallperson"); //redirect to action in the same controller
                 }
             }
         }
-        public ActionResult deletePerson(int id)
+        public ActionResult deletePerson(string id)
         {
-            using (var bwCtx = new EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
-                var book = bwCtx.Person.FirstOrDefault(b => b.Id == id);
+                var book = bwCtx.Users.FirstOrDefault(b => b.Id == id);
                 if (book != null)
                 {
-                    bwCtx.Person.Remove(book);
+                    bwCtx.Users.Remove(book);
                     bwCtx.SaveChanges();
                     TempData["message"] = $"Successfully delete book with Id: {book.Id}";
                 }
@@ -80,32 +211,69 @@ namespace ASM2.Controllers
             }
         }
         [HttpPost]
-        public ActionResult EditPerson(int id, Person newPerson)
+        public async Task<ActionResult> EditPerson(string id, ApplicationUser newUser)
         {
+            CustomValid(newUser);
+            ApplicationDbContext context = new ApplicationDbContext();
+            var roleManager = new Microsoft.AspNet.Identity.RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var userManager = new Microsoft.AspNet.Identity.UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             if (!ModelState.IsValid)
             {
-                return View(newPerson);
+                return View(newUser);
             }
             else
             {
-                using (var bwCtx = new ASM2.EF.FPTContext())
+                using (var bwCtx = new ApplicationDbContext())
                 {
-                    bwCtx.Entry<Person>(newPerson).State
+                    bwCtx.Entry<ApplicationUser>(newUser).State
                         = System.Data.Entity.EntityState.Modified;
 
                     //add book to context and mark it as modified to do update, not insert
-
+                    //var result = await userManager.ResetPasswordAsync(newUser.Id, "123", newUser.Telephone);
                     bwCtx.SaveChanges();
                 }
-                TempData["message"] = $"Successfully update book with Id: {newPerson.Id}";
-                return RedirectToAction("Index");
+                TempData["message"] = $"Successfully update book with Id: {newUser.Id}";
+
             }
+            return RedirectToAction("viewallperson");
         }
+
+
+        //[HttpPost]
+        //public ActionResult EditTrainee(string id, ApplicationUser trainee, FormCollection fc)
+        //{
+        //    TraineeValidation(trainee);
+        //    if (!ModelState.IsValid)
+        //    {
+        //        TempData["CourseIds"] = fc["courseIds[]"];
+        //        PrepareViewBag();
+        //        return View(trainee);
+        //    }
+        //    else
+        //    {
+        //        using (var asm = new ApplicationDbContext())
+        //        {
+        //            asm.Entry<ApplicationUser>(trainee).State
+        //                = System.Data.Entity.EntityState.Modified;
+
+        //            asm.Entry<ApplicationUser>(trainee).Collection(b => b.Courses).Load();
+
+        //            trainee.Courses = LoadCourse(asm, fc["courseIds[]"]);
+
+        //            asm.SaveChanges();
+        //        }
+        //        TempData["message"] = $"Successfully update Trainee with Name: {trainee.Name}";
+
+        //        return RedirectToAction("ViewAllTrainee");
+        //    }
+        //}
+
+
         public ActionResult ViewAllCategories()
         {
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwctx = new ApplicationDbContext())
             {
-                var books = bwCtx.Categories
+                var books = bwctx.Categories
                                  .OrderBy(b => b.Id)
                                  .ToList();
                 return View(books);
@@ -113,91 +281,8 @@ namespace ASM2.Controllers
         }
         // GET: Staff
 
-        public ActionResult ViewAllCat()
-        {
-            return View();
-        }
-        //[HttpGet]
-        //public ActionResult CreateTrainee()
-        //{
-        //    return View();
-        //}
-        //[HttpPost]
-        //public ActionResult CreateTrainee(Trainee newTrainee)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(newTrainee);
-        //    }
-        //    else
-        //    {
-        //        using (var bwCtx = new ASM2.EF.FPTContext())
-        //        {
-        //            bwCtx.Trainee.Add(newTrainee);
-        //            bwCtx.SaveChanges();
-        //        }
-
-        //        TempData["message"] = $"Successfully insert a new book with Id: {newTrainee.Id}";
-        //        return RedirectToAction("Index");
-        //    }
-
-        //}
-        //[HttpGet]
-        //public ActionResult EditTrainee(int id)
-        //{
-        //    using (var bwCtx = new ASM2.EF.FPTContext())
-        //    {
-        //        var book = bwCtx.Trainee.FirstOrDefault(b => b.Id == id);
-        //        //ef method to select only one or null if not found
-
-        //        if (book != null) // if a book is found, show edit view
-        //        {
-        //            return View(book);
-        //        }
-        //        else // if no book is found, back to index
-        //        {
-        //            return RedirectToAction("Index"); //redirect to action in the same controller
-        //        }
-        //    }
-        //}
-        //public ActionResult deleteTrainee(int id)
-        //{
-        //    using (var bwCtx = new EF.FPTContext())
-        //    {
-        //        var book = bwCtx.Trainee.FirstOrDefault(b => b.Id == id);
-        //        if (book != null)
-        //        {
-        //            bwCtx.Trainee.Remove(book);
-        //            bwCtx.SaveChanges();
-        //            TempData["message"] = $"Successfully delete book with Id: {book.Id}";
-        //        }
 
 
-        //        return RedirectToAction("Index");
-        //    }
-        //}
-        //[HttpPost]
-        //public ActionResult EditTrainee(int id, Trainee newTrainee)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(newTrainee);
-        //    }
-        //    else
-        //    {
-        //        using (var bwCtx = new ASM2.EF.FPTContext())
-        //        {
-        //            bwCtx.Entry<Trainee>(newTrainee).State
-        //                = System.Data.Entity.EntityState.Modified;
-
-        //            //add book to context and mark it as modified to do update, not insert
-
-        //            bwCtx.SaveChanges();
-        //        }
-        //        TempData["message"] = $"Successfully update book with Id: {newTrainee.Id}";
-        //        return RedirectToAction("Index");
-        //    }
-        //}
         //[HttpPost]
         //public ActionResult DeleteTrainee(int id)
         //{
@@ -227,13 +312,16 @@ namespace ASM2.Controllers
         [HttpPost]
         public ActionResult CreateCategories(Categories newCategories)
         {
+            ApplicationDbContext context = new ApplicationDbContext();
+            var roleManager = new Microsoft.AspNet.Identity.RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var userManager = new Microsoft.AspNet.Identity.UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             if (!ModelState.IsValid)
             {
                 return View(newCategories);
             }
             else
             {
-                using (var bwCtx = new ASM2.EF.FPTContext())
+                using (var bwCtx = new ApplicationDbContext())
                 {
                     bwCtx.Categories.Add(newCategories);
                     bwCtx.SaveChanges();
@@ -246,7 +334,7 @@ namespace ASM2.Controllers
         [HttpGet]
         public ActionResult EditCategories(int id)
         {
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
                 var book = bwCtx.Categories.FirstOrDefault(b => b.Id == id);
                 //ef method to select only one or null if not found
@@ -270,7 +358,7 @@ namespace ASM2.Controllers
             }
             else
             {
-                using (var bwCtx = new ASM2.EF.FPTContext())
+                using (var bwCtx = new ApplicationDbContext())
                 {
                     bwCtx.Entry<Categories>(newCategories).State
                         = System.Data.Entity.EntityState.Modified;
@@ -286,7 +374,7 @@ namespace ASM2.Controllers
 
         public ActionResult DeleteCategories(int id)
         {
-            using (var bwCtx = new EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
                 var book = bwCtx.Categories.FirstOrDefault(b => b.Id == id);
                 if (book != null)
@@ -392,7 +480,7 @@ namespace ASM2.Controllers
         public ActionResult ViewAllCourse()
         {
 
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
                 var books = bwCtx.Course
                                  .OrderBy(b => b.Id)
@@ -403,22 +491,15 @@ namespace ASM2.Controllers
         }
         private void PrepareViewBagS()
         {
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
-                //ViewBag.Class = bwCtx.Course
-                //                      .Select(p => new SelectListItem
-                //                      {
-                //                          Text = p.Name,
-                //                          Value = p.Id.ToString()
-                //                      })
-                //                      .ToList();
 
-                ViewBag.Person = bwCtx.Person.ToList();
+                ViewBag.Person = bwCtx.Course.ToList();
             }
         }
         private List<SelectListItem> GetCategoryDropDown()
         {
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
                 var categories = bwCtx.Categories
                                  .Select(p => new SelectListItem
@@ -430,19 +511,19 @@ namespace ASM2.Controllers
             }
         }
 
-        private List<Person> LoadFormatsS(ASM2.EF.FPTContext bwCtx, string formatIds)
+        private List<Course> LoadFormatsS(ApplicationDbContext bwCtx, string formatIds)
         {
             var selectedSIds = formatIds.Split(',')
                                         .Select(id => Int32.Parse(id))
                                         .ToArray();
-            return bwCtx.Person.Where(f => selectedSIds.Contains(f.Id)).ToList();
+            return bwCtx.Course.Where(f => selectedSIds.Contains(f.Id)).ToList();
 
         }
         [HttpGet]
         public ActionResult CreateCourse()
         {
 
-            PrepareViewBagS();
+
             ViewBag.Categories = GetCategoryDropDown();
             return View();
         }
@@ -452,22 +533,13 @@ namespace ASM2.Controllers
             ViewBag.Categories = GetCategoryDropDown();
             if (!ModelState.IsValid)
             {
-
-
-                TempData["traineeIds"] = fs["traineeIds[]"];
-                PrepareViewBagS();
-
                 return View(newCourse);
             }
             else
             {
-                using (var bwCtx = new ASM2.EF.FPTContext())
+                using (var bwCtx = new ApplicationDbContext())
                 {
-                    if (fs["traineeIds[]"] != null)
-                    {
 
-                        newCourse.Person = LoadFormatsS(bwCtx, fs["traineeIds[]"]);
-                    }
 
                     bwCtx.Course.Add(newCourse);
                     bwCtx.SaveChanges();
@@ -480,21 +552,20 @@ namespace ASM2.Controllers
         [HttpGet]
         public ActionResult EditCourse(int id)
         {
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
                 ViewBag.Categories = GetCategoryDropDown();
 
+                var a = new ApplicationDbContext();
 
-
-                var person = bwCtx.Course
-                    .Include(b => b.Person)
+                var user = bwCtx.Course
                     .FirstOrDefault(b => b.Id == id);
 
-                if (person != null) // if a book is found, show edit view
+                if (user != null) // if a book is found, show edit view
                 {
 
-                    PrepareViewBagS();
-                    return View(person);
+
+                    return View(user);
                 }
                 else // if no book is found, back to index
                 {
@@ -508,24 +579,16 @@ namespace ASM2.Controllers
             ViewBag.Categories = GetCategoryDropDown();
             if (!ModelState.IsValid)
             {
-
-                TempData["traineeIds"] = fc["traineeIds[]"];
-                PrepareViewBagS();
-
                 return View(newCourse);
             }
             else
             {
 
-                using (var bwCtx = new ASM2.EF.FPTContext())
+                using (var bwCtx = new ApplicationDbContext())
                 {
+
                     bwCtx.Entry<Course>(newCourse).State
                         = System.Data.Entity.EntityState.Modified;
-
-                    bwCtx.Entry<Course>(newCourse).Collection(b => b.Person).Load();
-
-
-                    newCourse.Person = LoadFormatsS(bwCtx, fc["traineeIds[]"]);
                     //add book to context and mark it as modified to do update, not insert
 
                     bwCtx.SaveChanges();
@@ -538,7 +601,7 @@ namespace ASM2.Controllers
 
         public ActionResult DeleteCourse(int id)
         {
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
                 var book = bwCtx.Course.FirstOrDefault(b => b.Id == id);
                 if (book != null)
@@ -553,15 +616,15 @@ namespace ASM2.Controllers
             }
         }
         [HttpGet]
-        public ActionResult AssignTrainerToCourse(int id)
+        public ActionResult AssignTrainerToCourse(string id)
         {
 
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
-                ViewBag.Categories = GetCategoryDropDown();
 
-                var Person = bwCtx.Course
-                    .Include(b => b.Person)
+
+                var Person = bwCtx.Users
+                    .Include(b => b.Course)
                     .FirstOrDefault(b => b.Id == id);
 
                 if (Person != null) // if a book is found, show edit view
@@ -572,35 +635,37 @@ namespace ASM2.Controllers
                 }
                 else // if no book is found, back to index
                 {
-                    return RedirectToAction("ViewAllCourse"); //redirect to action in the same controller
+                    return RedirectToAction("ViewAllPerson"); //redirect to action in the same controller
                 }
             }
         }
         [HttpPost]
-        public ActionResult AssignTrainerToCourse(int id, Course newCourse, FormCollection fc)
+        public ActionResult AssignTrainerToCourse(string id, ApplicationUser newUser, FormCollection fc)
         {
-            ViewBag.Categories = GetCategoryDropDown();
+
             if (!ModelState.IsValid)
             {
 
-                TempData["traineeIds"] = fc["traineeIds[]"];
+                TempData["TrainerIds"] = fc["TrainerIds[]"];
                 PrepareViewBagS();
 
-                return View(newCourse);
+                return View(newUser);
             }
             else
             {
 
-                using (var bwCtx = new ASM2.EF.FPTContext())
+                using (var bwCtx = new ApplicationDbContext())
                 {
-                    bwCtx.Entry<Course>(newCourse).State
-                        = System.Data.Entity.EntityState.Modified;
 
-                    bwCtx.Entry<Course>(newCourse).Collection(b => b.Person).Load();
 
-                    if (fc["traineeIds[]"] != null)
+                    if (fc["TrainerIds[]"] != null)
                     {
-                        newCourse.Person = LoadFormatsS(bwCtx, fc["traineeIds[]"]);
+                        bwCtx.Entry<ApplicationUser>(newUser).State
+                           = System.Data.Entity.EntityState.Modified;
+
+                        bwCtx.Entry<ApplicationUser>(newUser).Collection(b => b.Course).Load();
+                        newUser.Course = LoadFormatsS(bwCtx, fc["TrainerIds[]"]);
+
                         bwCtx.SaveChanges();
                     }
 
@@ -608,21 +673,22 @@ namespace ASM2.Controllers
 
 
                 }
-                TempData["message"] = $"Successfully update book with Id: {newCourse.Id}";
+                TempData["message"] = $"Successfully update book with Id: {newUser.Id}";
 
-                return RedirectToAction("ViewAllCourse");
+                return RedirectToAction("ViewAllPerson");
             }
         }
         [HttpGet]
-        public ActionResult AssignTraineeToCourse(int id)
+        public ActionResult AssignTraineeToCourse(string id)
         {
 
-            using (var bwCtx = new ASM2.EF.FPTContext())
+            using (var bwCtx = new ApplicationDbContext())
             {
-                ViewBag.Categories = GetCategoryDropDown();
 
-                var Person = bwCtx.Course
-                    .Include(b => b.Person)
+
+
+                var Person = bwCtx.Users
+                    .Include(b => b.Course)
                     .FirstOrDefault(b => b.Id == id);
 
                 if (Person != null) // if a book is found, show edit view
@@ -633,46 +699,52 @@ namespace ASM2.Controllers
                 }
                 else // if no book is found, back to index
                 {
-                    return RedirectToAction("ViewAllCourse"); //redirect to action in the same controller
+                    return RedirectToAction("ViewAllPerson"); //redirect to action in the same controller
                 }
             }
         }
+
         [HttpPost]
-        public ActionResult AssignTraineeToCourse(int id, Course newCourse, FormCollection fc)
+        public ActionResult AssignTraineeToCourse(string id, ApplicationUser newUser, FormCollection fc)
         {
-            ViewBag.Categories = GetCategoryDropDown();
+
+
             if (!ModelState.IsValid)
             {
 
                 TempData["traineeIds"] = fc["traineeIds[]"];
                 PrepareViewBagS();
 
-                return View(newCourse);
+                return View(newUser);
             }
             else
             {
 
-                using (var bwCtx = new ASM2.EF.FPTContext())
+                using (var bwCtx = new ApplicationDbContext())
                 {
-                    bwCtx.Entry<Course>(newCourse).State
-                        = System.Data.Entity.EntityState.Modified;
 
-                    bwCtx.Entry<Course>(newCourse).Collection(b => b.Person).Load();
+
 
 
                     if (fc["traineeIds[]"] != null)
                     {
-                        newCourse.Person = LoadFormatsS(bwCtx, fc["traineeIds[]"]);
+                        bwCtx.Entry<ApplicationUser>(newUser).State
+                           = System.Data.Entity.EntityState.Modified;
+
+                        bwCtx.Entry<ApplicationUser>(newUser).Collection(b => b.Course).Load();
+                        newUser.Course = LoadFormatsS(bwCtx, fc["traineeIds[]"]);
+
                         bwCtx.SaveChanges();
                     }
                     //add book to context and mark it as modified to do update, not insert
 
 
                 }
-                TempData["message"] = $"Successfully update book with Id: {newCourse.Id}";
+                TempData["message"] = $"Successfully update book with Id: {newUser.Id}";
 
-                return RedirectToAction("ViewAllCourse");
+                return RedirectToAction("ViewAllPerson");
             }
         }
     }
+
 }

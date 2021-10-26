@@ -1,8 +1,8 @@
-﻿@model IEnumerable<ASM2.Models.FPT.Person>
+﻿@model IEnumerable<ASM2.Models.ApplicationUser>
 
 @{
     ViewBag.Title = "Person";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Staff/_LayoutPageStaff.cshtml";
 }
 <style>
     tbody tr {
@@ -10,16 +10,22 @@
     }
 </style>
 <div class="row mt-2">
-    @Html.Partial("_LinkLeft")
+    
     <div class="col-8">
         <form>
             <h2>View All Trainer Trainee</h2>
             <div class="dropdown mb-3">
-                <p class="btn btn-secondary" style="margin:0;">
-                    Choose role
-                </p>
-                <button type="button" class="btn btn-outline-primary Trainer1">Trainer</button>
-                <button type="button" class="btn btn-outline-primary Trainee1">Trainee</button>
+                
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active Trainer1">
+                        <input type="radio" name="options" id="option1" checked> Trainer
+                    </label>
+                    <label class="btn btn-secondary Trainee1">
+                        <input type="radio" name="options" id="option2"> Trainee
+                    </label>
+                    
+                </div>
+               
 
             </div>
             <input type="text" id="myInputT" onkeyup="myFunction()" placeholder="Search by names.." class="form-control mb-3" style="display:none">
@@ -27,17 +33,19 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Role</th>
+                        <th scope="col">Email</th>
                         <th scope="col">Name</th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
+                        <th scope="col">Assign</th>
+                        
                     </tr>
                 </thead>
                 @foreach (var a in Model)
                 {
                     <tbody id="myTable">
                         <tr class="@a.Role">
-                            <td scope="row">@Html.DisplayFor(model => a.Role)</td>
+                            <td scope="row">@Html.DisplayFor(model => a.Email)</td>
                             <td>@Html.DisplayFor(model => a.Name)</td>
                             <td>
                                 <a href="@Url.Action("EditPerson", new {id = a.Id })">
@@ -47,6 +55,16 @@
                             <td>
                                 <a href="@Url.Action("deletePerson", new {id = a.Id })">
                                     <button type="button" class="btn btn-primary mb-2">delete</button>
+                                </a>
+                            </td>
+                            <td class="Trainer"> 
+                                <a href="@Url.Action("AssignTrainerToCourse", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary" style="margin-top:7px;">Assign this trainer</button>
+                                </a>
+                            </td>
+                            <td class="Trainee">
+                                <a href="@Url.Action("AssignTraineeToCourse", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary" style="margin-top:7px;">Assign this trainee</button>
                                 </a>
                             </td>
                         </tr>
@@ -60,9 +78,13 @@
     </div>
 </div>
 <script>
-
-
-
+    $("tr").remove(".Admin");
+    $("tr").remove(".Staff");
+    $('#myInputT').css('display', 'block');
+    $('#myInputS').css('display', 'none');
+    $('.Trainee').css('display', 'none');
+    $('.Trainer').css('display', 'table-row');
+    
 
     var a = true;
     $('.Trainee1').click(function () {
@@ -70,12 +92,14 @@
         $('.Trainer').css('display', 'none');
         $('.Trainee').css('display', 'table-row');
         $('#myInputT').css('display', 'none');
+        console.log(1);
     });
     $('.Trainer1').click(function () {
         $('#myInputT').css('display', 'block');
         $('#myInputS').css('display', 'none');
         $('.Trainee').css('display', 'none');
         $('.Trainer').css('display', 'table-row');
+        console.log(1);
     });
 
     $('#myInputS').on('keyup', function (event) {
@@ -86,9 +110,9 @@
         $('#myTable tr').filter(function () {
 
             $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
-            $('.Admin').css('display', 'none');
-            $('.Staff').css('display', 'none');
+
             $('.Trainer').css('display', 'none');
+            console.log(1);
         });
     });
 
@@ -100,9 +124,9 @@
         $('#myTable tr').filter(function () {
 
             $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
-            $('.Admin').css('display', 'none');
-            $('.Staff').css('display', 'none');
-            $('.Student').css('display', 'none');
+
+            $('.Trainee').css('display', 'none');
+            console.log(1);
         });
     });
 

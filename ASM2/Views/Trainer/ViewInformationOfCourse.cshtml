@@ -1,8 +1,32 @@
-﻿
+﻿@model ASM2.Models.FPT.Course
 @{
     ViewBag.Title = "ViewInformationOfCourse";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Trainer/_LayoutPageTrainer.cshtml";
 }
 
-<h2>ViewInformationOfCourse</h2>
+<h2>View Information Of Course</h2>
+<div class="col-8">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Student and Teacher</th>
+                <th scope="col">Role</th>
 
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var f in ViewBag.User)
+            {
+
+
+                <tr>
+                    <th scope="row">@f.Name</th>
+                    <th scope="row">@f.Role</th>
+                </tr>
+
+
+
+            }
+        </tbody>
+    </table>
+</div>

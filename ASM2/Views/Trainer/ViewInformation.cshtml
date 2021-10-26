@@ -1,8 +1,37 @@
-﻿
+﻿@model ASM2.Models.ApplicationUser
 @{
-    ViewBag.Title = "ViewInformation";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "View courses assigned";
+    Layout = "~/Views/Trainer/_LayoutPageTrainer.cshtml";
 }
 
-<h2>ViewInformation</h2>
+<h2>View courses assigned</h2>
 
+<div class="col-8">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Course Assign</th>
+                <th scope="col">View Detail</th>
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var f in ViewBag.Course)
+            {
+
+
+                <tr>
+                    <th scope="row">@f.Name</th>
+
+                    <th scope="row"><a href="@Url.Action("ViewInformationOfCourse", new {id = f.Id })">View Detail Course</a></th>
+
+                </tr>
+
+
+
+            }
+        </tbody>
+    </table>
+</div>

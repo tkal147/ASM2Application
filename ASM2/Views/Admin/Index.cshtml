@@ -1,35 +1,142 @@
-﻿@model IEnumerable<TrainingStaff>
+﻿@model IEnumerable<ASM2.Models.ApplicationUser>
+
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Person";
+    Layout = "~/Views/Admin/_LayoutPageAdmin.cshtml";
 }
-
+<style>
+    tbody tr {
+        display: none;
+    }
+</style>
 <div class="row mt-2">
-    @Html.Partial("_Link")
-    <div class="col-8">
+
+    <div class="col-9">
         <form>
-            <h2>Staff</h2>
-            @foreach (var a in Model)
-            {
-                <div class="item p-3">
-                    <div class="form-group">
+            <h2>View All Person</h2>
+            <div class="dropdown mb-3">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-secondary active Trainer1">
+                        <input type="radio" name="options" id="option1" checked> Trainer
+                    </label>
+                    <label class="btn btn-secondary Staff1">
+                        <input type="radio" name="options" id="option2"> Staff
+                    </label>
 
-
-                        @Html.EditorFor(model => a.Name, new { htmlAttributes = new { @class = "form-control line-1", disabled = "disabled" } })
-                        <a href="@Url.Action("EditStaff", new {id = a.Id })">
-                            <button type="button" class="btn btn-primary mb-2">View detail</button>
-                        </a>
-
-
-                        <a href="@Url.Action("DeleteStaff", new {id = a.Id })">
-                            <button type="button" class="btn btn-primary mb-2">Delete</button>
-                        </a>
-
-                    </div>
                 </div>
-            }
+                
+                
 
+                
+            </div>
+            <input type="text" id="myInputT" onkeyup="myFunction()" placeholder="Search by names.." class="form-control mb-3">
+            
+            <input type="text" id="myInputSt" onkeyup="myFunction()" placeholder="Search by names.." class="form-control mb-3" style="display:none">
+            <table class="table">
+                <thead>
+                    <tr>
+                       
+                        <th scope="col">Name</th>
+                        <th scope="col">UserName</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                @foreach (var a in Model)
+                {
+                    <tbody id="myTable">
+                        <tr class="@a.Role">
+                            
+                            <td>@Html.DisplayFor(model => a.Name)</td>
+                            <td scope="row">@Html.DisplayFor(model => a.UserName)</td>
+                            <td>@Html.DisplayFor(model => a.Email)</td>
+                            <td>
+                                <a href="@Url.Action("EditPersonAcc", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">View detail</button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("deletePerson", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">delete</button>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+
+
+                }
+            </table>
         </form>
+
     </div>
 </div>
+<script>
+
+    $('.Trainer').css('display', 'table-row');
+    $("tr").remove(".Admin");
+    $("tr").remove(".Trainee");
+
+    var a = true;
+    
+    $('.Trainer1').click(function () {
+        $('#myInputT').css('display', 'block');
+        $('#myInputS').css('display', 'none');
+        $('#myInputSt').css('display', 'none');
+        $('.Student').css('display', 'none');
+        $('.Trainer').css('display', 'table-row');
+        $('.Staff').css('display', 'none');
+    });
+    $('.Staff1').click(function () {
+        $('#myInputSt').css('display', 'block');
+        $('#myInputS').css('display', 'none');
+        $('#myInputT').css('display', 'none');
+        $('.Student').css('display', 'none');
+        $('.Trainer').css('display', 'none');
+        
+        $('.Staff').css('display', 'table-row');
+    });
+
+    $('#myInputS').on('keyup', function (event) {
+        event.preventDefault();
+        /* Act on the event */
+
+        var input = $(this).val().toLowerCase();
+        $('#myTable tr').filter(function () {
+
+            $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+            $('.Admin').css('display', 'none');
+            $('.Staff').css('display', 'none');
+            $('.Trainer').css('display', 'none');
+        });
+    });
+
+    $('#myInputT').on('keyup', function (event) {
+        event.preventDefault();
+        /* Act on the event */
+
+        var input = $(this).val().toLowerCase();
+        $('#myTable tr').filter(function () {
+
+            $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+            $('.Admin').css('display', 'none');
+            $('.Staff').css('display', 'none');
+            $('.Trainee').css('display', 'none');
+        });
+    });
+    $('#myInputSt').on('keyup', function (event) {
+        event.preventDefault();
+        /* Act on the event */
+
+        var input = $(this).val().toLowerCase();
+        $('#myTable tr').filter(function () {
+
+            $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+            $('.Admin').css('display', 'none');
+            $('.Trainer').css('display', 'none');
+            $('.Trainee').css('display', 'none');
+        });
+    });
+
+</script>
 

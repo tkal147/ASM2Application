@@ -1,74 +1,30 @@
-﻿<div class="col-3 mt-2">
-    @*<div class="form-group">
+﻿<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
 
-        <select class="form-control" id="exampleFormControlSelect1">
-            <option>DashBoard</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
-    </div>*@
-    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Home
-    </button>
-    @*<div class="form-group">
-        <label for="exampleFormControlSelect1"></label>
-        <select class="form-control" id="exampleFormControlSelect1">
-            <option>Training Account</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
-    </div>*@
-    <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Trainee Account
-    </button>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Add new Trainee Account
-    </button>
-    @*<div class="form-group">
-        <label for="exampleFormControlSelect1"></label>
-        <select class="form-control" id="exampleFormControlSelect1">
-            <option>Course</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
-    </div>*@
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Categories
-    </button>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Course
-    </button>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Topic
-    </button>
-    @*<div class="form-group">
-        <label for="exampleFormControlSelect1"></label>
-        <select class="form-control" id="exampleFormControlSelect1">
-            <option>Assign</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-        </select>
-    </div>*@
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Trainer Topic
-    </button>
-    <button type="button" class="btn btn-primary mt-2" data-toggle="button" aria-pressed="false"
-            autocomplete="off">
-        Trainer course
-    </button>
-</div>
+        <a class="navbar-brand" href="#">FPT</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown" style="display:flex;justify-content:space-between">
+            <ul class="navbar-nav">
+                
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="@Url.Action("CreatePerson","Admin")">Add Account</a>
+                        <a class="dropdown-item" href="@Url.Action("Index","Admin")">View all Account</a>
+
+                    </div>
+                </li>
+                
+
+
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+
+    </div>
+</nav>

@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ASM2.Models;
+using ASM2.Models.FPT;
 
 namespace ASM2.Controllers
 {
@@ -72,21 +73,23 @@ namespace ASM2.Controllers
             {
                 return View(model);
             }
-
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var userId = User.Identity.GetUserId();
+            var bwCtx = new ApplicationDbContext();
+            var book = bwCtx.Users.FirstOrDefault(b => b.Id == userId);
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, change to shouldLockout: true
+                var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Route");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Invalid Account.");
                     return View(model);
             }
         }
@@ -124,7 +127,7 @@ namespace ASM2.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(model.ReturnUrl);
+                    return RedirectToAction("Route");
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.Failure:
@@ -133,7 +136,32 @@ namespace ASM2.Controllers
                     return View(model);
             }
         }
+        public ActionResult Route()
+        {
+            if (User.IsInRole(SecurityRole.Admin))
+            {
+                /*SessionLogin(fuser.UserName);*/
+                //TempData["acb"] = fuser.UserName;
+                return RedirectToAction("Index", "Admin");
+            }
+            if (User.IsInRole(SecurityRole.Staff))
+            {
+                //TempData["UN"] = fuser.UserName;
+                return RedirectToAction("ViewAllPerson", "Staff");
+            }
 
+            if (User.IsInRole(SecurityRole.Trainer))
+            {
+                //TempData["acb"] = fuser.Id;
+                return RedirectToAction("Index", "Trainer");
+            }
+            if (User.IsInRole(SecurityRole.Trainee))
+            {
+                //TempData["xyz"] = fuser.Id;
+                return RedirectToAction("Index", "Trainee");
+            }
+            else return Content($"Comming Soon!!!");
+        }
         //
         // GET: /Account/Register
         [AllowAnonymous]

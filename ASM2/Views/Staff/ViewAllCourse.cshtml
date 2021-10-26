@@ -1,40 +1,64 @@
 ﻿@model IEnumerable<ASM2.Models.FPT.Course>
 @{
     ViewBag.Title = "ViewAllCourse";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Staff/_LayoutPageStaff.cshtml";
 }
 
 <div class="row mt-2">
-    @Html.Partial("_LinkLeft")
+   
     <div class="col-8">
         <form>
             <h2>View Course</h2>
+            <input type="text" id="myInputT" onkeyup="myFunction()" placeholder="Search by names.." class="form-control mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                        
+                    </tr>
+                </thead>
 
-            @foreach (var a in Model)
-            {
-                <div class="item p-3">
-                    <div class="form-group">
+                <tbody id="myTable">
+                    @foreach (var a in Model)
+                    {
+                        <tr>
+                            <td scope="row">@Html.DisplayFor(model => a.Name)</td>
+                            <td>@Html.DisplayFor(model => a.Descrpitipon)</td>
+                            <td>
+                                <a href="@Url.Action("EditCourse", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">View detail</button>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="@Url.Action("DeleteCourse", new {id = a.Id })">
+                                    <button type="button" class="btn btn-primary mb-2">delete</button>
+                                </a>
+                            </td>
+                            
+                            
+                        </tr>
 
-
-                        <div style="display:flex;" class="mb-3">
-                            @Html.EditorFor(model => a.Name, new { htmlAttributes = new { @class = " form-control line-1", disabled = "disabled" , style ="width:50%"} })
-                            @Html.EditorFor(model => a.Descrpitipon, new { htmlAttributes = new { @class = "form-control line-1", disabled = "disabled", style = "width:49%" } })
-                        </div>
-                        <a href="@Url.Action("EditCourse", new {id = a.Id })">
-                            <button type="button" class="btn btn-primary mb-2">View detail</button>
-                        </a>
-
-
-                        <a href="@Url.Action("DeleteCourse", new {id = a.Id })">
-                            <button type="button" class="btn btn-primary mb-2">Delete</button>
-                        </a>
-
-                    </div>
-                </div>
-            }
-
+                    }
+                </tbody>
+            </table>
         </form>
     </div>
 </div>
 
 
+<script>
+    $('#myInputT').on('keyup', function (event) {
+        event.preventDefault();
+        /* Act on the event */
+
+        var input = $(this).val().toLowerCase();
+        $('#myTable tr').filter(function () {
+
+            $(this).toggle($(this).text().toLowerCase().indexOf(input) > -1);
+
+        });
+    });
+</script>
